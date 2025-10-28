@@ -18,11 +18,9 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
                        AccessDeniedException accessDeniedException)
             throws IOException, ServletException {
 
-        // Set 403 Forbidden status
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.setContentType("application/json");
 
-        // Custom JSON message
         String jsonResponse = String.format(
                 "{\"error\": \"%s\", \"message\": \"%s\"}",
                 "Access Denied",

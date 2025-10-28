@@ -32,7 +32,6 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // Signup with enum-based Role
     public User signup(String username, String password, String roleName) {
         if (userRepository.findByUsername(username).isPresent()) {
             throw new RuntimeException("Username already exists");
@@ -44,7 +43,7 @@ public class AuthService {
 
         Role role;
         try {
-            role = Role.valueOf(roleName); // converts string to enum
+            role = Role.valueOf(roleName);
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("Invalid role: " + roleName);
         }
@@ -67,13 +66,12 @@ public class AuthService {
             throw new RuntimeException("Invalid username or password");
         }
 
-        String role = user.getRoles().iterator().next().name(); // Get enum name like ROLE_USER
+        String role = user.getRoles().iterator().next().name();
         String token = jwtTokenUtil.generateToken(username, role);
 
         return new LoginResponse(token, username, role);
     }
 
-    // Logout
     public void logout(String token) {
         if(token == null) return;
         if(token.toLowerCase().startsWith("bearer ")){

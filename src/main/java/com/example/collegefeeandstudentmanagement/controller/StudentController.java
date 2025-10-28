@@ -5,6 +5,7 @@ import com.example.collegefeeandstudentmanagement.dto.StudentResponseDTO;
 import com.example.collegefeeandstudentmanagement.dto.UpdateStudentDTO;
 import com.example.collegefeeandstudentmanagement.entity.Student;
 import com.example.collegefeeandstudentmanagement.repository.StudentRepository;
+import com.example.collegefeeandstudentmanagement.service.StudentFeeMapperService;
 import com.example.collegefeeandstudentmanagement.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -22,10 +23,12 @@ import java.util.Optional;
 public class StudentController {
     private final StudentRepository studentRepository;
     private final StudentService studentService;
+    private final StudentFeeMapperService studentFeeMapperService;
 
-    public StudentController(StudentRepository studentRepository, StudentService studentService) {
+    public StudentController(StudentRepository studentRepository, StudentService studentService, StudentFeeMapperService studentFeeMapperService) {
         this.studentRepository = studentRepository;
         this.studentService = studentService;
+        this.studentFeeMapperService = studentFeeMapperService;
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -98,7 +101,7 @@ public class StudentController {
             @Valid @RequestBody UpdateStudentDTO dto){
         Optional<Student> updated = studentService.updateStudent(id, dto);
         return updated
-                .map(student ->ResponseEntity.<Student>ok(student))
+                .map(student -> ResponseEntity.ok(student))
                 .orElse(ResponseEntity.notFound().build());
     }
     private StudentResponseDTO mapToDTO(Student student){
@@ -114,7 +117,15 @@ public class StudentController {
         dto.setProgram(student.getProgram());
         dto.setCreatedAt(student.getCreatedAt());
         if(student.getStudentFee() != null){
-            dto.setStudentFee(new StudentFeeResponseDTO(student.getStudentFee()));
+            try{
+                StudentFeeResponseDTO feeDTO = studentFeeMapperService.toDTO(student.getStudentFee());
+                dto.setStudentFee(feeDTO);
+            }
+            catch(Exception e){
+                System.err.println("Error mapping student fee for student" + student.getId() + ":" +
+                        e.getMessage());
+                dto.setStudentFee(null);
+            }
         }
         return dto;
     }

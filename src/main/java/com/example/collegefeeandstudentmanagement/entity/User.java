@@ -13,7 +13,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // We use "username" as the login identifier (email). Make it unique.
     @Column(nullable = false, unique = true)
     private String username;
 
@@ -23,7 +22,6 @@ public class User {
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt = Instant.now();
 
-    // store roles in user_roles table as strings (enum names).
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
@@ -32,7 +30,6 @@ public class User {
 
     public User() {}
 
-    // --- getters / setters ---
     public Long getId() { return id; }
 
     public void setId(Long id) { this.id = id; }
@@ -40,7 +37,6 @@ public class User {
     public String getUsername() { return username; }     // <-- fixes your error
     public void setUsername(String username) { this.username = username; }
 
-    // convenience if other code uses getEmail()/setEmail() — map email to username
     public String getEmail() { return this.username; }
     public void setEmail(String email) { this.username = email; }
 

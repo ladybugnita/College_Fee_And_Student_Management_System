@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 @Service
 public class EsewaPaymentService {
+    private static final String ESEWA_VERIFY_URL = "https://uat.esewa.com.np/epay/transrec";
+    private static final String ESEWA_MERCHANT_CODE = "EPAYTEST";
     private final RestTemplate restTemplate = new RestTemplate();
 
     public Map<String, String> initiatePayment(String transactionId, double amount){

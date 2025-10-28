@@ -40,7 +40,7 @@ public class SecurityConfig {
         http
                 .csrf(CsrfConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/signup", "/api/auth/login", "/api/auth/logout").permitAll()
+                        .requestMatchers("/api/auth/signup", "/api/auth/login", "/api/auth/logout", "/api/esewa/success", "/api/esewa/failure").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex
