@@ -22,6 +22,9 @@ public class User {
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt = Instant.now();
 
+    @Column(name = "first_login", nullable = false)
+    private Boolean firstLogin = false;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
@@ -34,7 +37,7 @@ public class User {
 
     public void setId(Long id) { this.id = id; }
 
-    public String getUsername() { return username; }     // <-- fixes your error
+    public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
 
     public String getEmail() { return this.username; }
@@ -45,6 +48,13 @@ public class User {
 
     public Instant getCreatedAt() { return createdAt; }
     public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
+
+    public Boolean getFirstLogin() {
+        return firstLogin;
+    }
+    public void setFirstLogin(Boolean firstLogin){
+        this.firstLogin = firstLogin;
+    }
 
     public Set<Role> getRoles() { return roles; }
     public void setRoles(Set<Role> roles) { this.roles = roles; }
